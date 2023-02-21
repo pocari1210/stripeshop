@@ -17,25 +17,59 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
+
+    // ★loginをした後のリダイレクト先★
+    
+    // user用のリダイレクト先
     public const HOME = '/dashboard';
+    // owner用のリダイレクト先
+    public const OWNER_HOME = '/owner/dashboard';
+    // admin用のリダイレクト先
+    public const ADMIN_HOME = '/admin/dashboard';
 
     /**
      * Define your route model bindings, pattern filters, and other route configuration.
      *
      * @return void
      */
+
+    // ★画面を読み込まれた後に実行される★
+
+    // prefex()はURLの先頭を引数名にすることができる
+    // asメソッドは別名をつけることができる
     public function boot()
     {
         $this->configureRateLimiting();
 
         $this->routes(function () {
-            Route::middleware('api')
-                ->prefix('api')
+            Route::prefix('api')
+                ->middleware('api')
+                ->namespace($this->namespace)
                 ->group(base_path('routes/api.php'));
+            
+            // adminのルート情報:
+            Route::prefix('admin')
+                ->as('admin.')
+                ->middleware('web')
+                ->namespace($this->namespace)
+                ->group(base_path('routes/admin.php'));
+            
+            // ownerのルート情報:
+            Route::prefix('owner')
+                ->as('owner.')
+                ->middleware('web')
+                ->namespace($this->namespace)
+                ->group(base_path('routes/owner.php'));
 
-            Route::middleware('web')
+            // userのルート情報:
+            // ownerやadminがついてない場合はすべてuserのURLになる
+            Route::prefix('/')
+                ->as('user.')
+                ->middleware('web')
+                ->namespace($this->namespace)
                 ->group(base_path('routes/web.php'));
-        });
+
+            });
     }
 
     /**

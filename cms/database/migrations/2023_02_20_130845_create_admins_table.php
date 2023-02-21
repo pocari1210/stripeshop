@@ -13,6 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
+        // userテーブルを参考にadminテーブルを作成
         Schema::create('admins', function (Blueprint $table) {
             $table->id();
             $table->string('name');

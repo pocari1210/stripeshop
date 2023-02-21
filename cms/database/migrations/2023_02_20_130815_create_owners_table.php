@@ -13,6 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
+        // userテーブルを元にownerテーブルを作成
         Schema::create('owners', function (Blueprint $table) {
             $table->id();
             $table->string('name');
