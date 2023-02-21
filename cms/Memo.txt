@@ -1,0 +1,3 @@
+php artisan make:seeder CategorysSeeder
+
+php artisan make:migration create_categorys_table --create=categorys
